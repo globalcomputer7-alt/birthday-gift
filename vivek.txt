@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Happy Birthday ??</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ff758c, #ff7eb3, #7b61ff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      width: 92%;
+      max-width: 600px;
+      text-align: center;
+      padding: 35px 20px;
+      border-radius: 25px;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+      z-index: 5;
+    }
+
+    .cake {
+      font-size: 80px;
+      animation: bounce 1.5s infinite;
+    }
+
+    h1 {
+      font-size: clamp(38px, 10vw, 70px);
+      margin: 15px 0;
+      text-shadow: 0 0 15px rgba(255,255,255,.8);
+      animation: glow 2s infinite alternate;
+    }
+
+    .name {
+      font-size: clamp(28px, 7vw, 48px);
+      font-weight: bold;
+      color: #ffe66d;
+      margin-bottom: 15px;
+    }
+
+    .message {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 15px auto 25px;
+      max-width: 500px;
+    }
+
+    button {
+      border: none;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #ff4f81;
+      background: white;
+      box-shadow: 0 8px 20px rgba(0,0,0,.2);
+      transition: .3s;
+    }
+
+    button:hover {
+      transform: scale(1.08);
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -150px;
+      font-size: 60px;
+      animation: fly 8s linear infinite;
+      opacity: .9;
+    }
+
+    .b1 { left: 5%; animation-delay: 0s; }
+    .b2 { left: 25%; animation-delay: 2s; }
+    .b3 { left: 50%; animation-delay: 4s; }
+    .b4 { left: 75%; animation-delay: 1s; }
+    .b5 { left: 90%; animation-delay: 3s; }
+
+    @keyframes fly {
+      0% {
+        transform: translateY(0) rotate(0deg);
+      }
+      100% {
+        transform: translateY(-120vh) rotate(20deg);
+      }
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 10px white;
+      }
+      to {
+        text-shadow: 0 0 30px #fff, 0 0 50px #ffe66d;
+      }
+    }
+
+    canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 15px;
+      }
+
+      .cake {
+        font-size: 65px;
+      }
+
+      .message {
+        font-size: 16px;
+      }
+
+      .balloon {
+        font-size: 45px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <canvas id="confetti"></canvas>
+
+  <!-- Floating Balloons -->
+  <div class="balloon b1">??</div>
+  <div class="balloon b2">??</div>
+  <div class="balloon b3">??</div>
+  <div class="balloon b4">??</div>
+  <div class="balloon b5">??</div>
+
+  <div class="container">
+
+    <div class="cake">??</div>
+
+    <h1>Happy Birthday!</h1>
+
+    <!-- CHANGE THE NAME HERE -->
+    <div class="name">Piyush ??</div>
+
+    <p class="message">
+      Wishing you a day filled with happiness, laughter,
+      love and unforgettable moments! ???
+      <br><br>
+      May all your dreams come true and this new year
+      of your life bring you lots of success! ??
+    </p>
+
+    <button onclick="celebrate()">
+      ?? Celebrate!
+    </button>
+
+  </div>
+
+  <script>
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+
+    let particles = [];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    function createConfetti() {
+      particles = [];
+
+      for (let i = 0; i < 180; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: -Math.random() * canvas.height,
+          size: Math.random() * 8 + 4,
+          speed: Math.random() * 4 + 2,
+          angle: Math.random() * 360,
+          rotation: Math.random() * 10,
+          color: [
+            "#ff4d6d",
+            "#ffd166",
+            "#06d6a0",
+            "#118ab2",
+            "#ffffff",
+            "#8338ec"
+          ][Math.floor(Math.random() * 6)]
+        });
+      }
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      particles.forEach((p) => {
+        p.y += p.speed;
+        p.angle += p.rotation;
+
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+
+        ctx.save();
+
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.angle * Math.PI / 180);
+
+        ctx.fillStyle = p.color;
+        ctx.fillRect(
+          -p.size / 2,
+          -p.size / 2,
+          p.size,
+          p.size
+        );
+
+        ctx.restore();
+      });
+
+      requestAnimationFrame(animateConfetti);
+    }
+
+    function celebrate() {
+      createConfetti();
+
+      // Extra burst from the center
+      for (let i = 0; i < 80; i++) {
+        particles.push({
+          x: canvas.width / 2,
+          y: canvas.height / 2,
+          size: Math.random() * 8 + 4,
+          speed: Math.random() * 8 + 3,
+          angle: Math.random() * 360,
+          rotation: Math.random() * 10,
+          color: [
+            "#ff4d6d",
+            "#ffd166",
+            "#06d6a0",
+            "#118ab2",
+            "#ffffff",
+            "#8338ec"
+          ][Math.floor(Math.random() * 6)]
+        });
+      }
+    }
+
+    createConfetti();
+    animateConfetti();
+
+    // Start celebration automatically
+    setTimeout(() => {
+      celebrate();
+    }, 500);
+  </script>
+
+</body>
+</html>
